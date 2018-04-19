@@ -16,5 +16,4 @@ public interface IController {
 	Course getCourse(String courseDept,int courseNumber);
 	// Print classlists for all courses.
 	void printClassList();
-	
 }

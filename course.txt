@@ -1,0 +1,4 @@
+// This is a comma-separated input file.
+// Data stored in the file in order: courseDept, courseNumber, capacity (maximum number of students)
+CS,1040,10
+CS,1060,2
