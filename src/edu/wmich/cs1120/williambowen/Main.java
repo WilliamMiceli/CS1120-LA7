@@ -6,7 +6,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main {
-
+	/**
+	 * Main
+	 * @param args Nothing needed
+	 * @throws IOException In case of file issues
+	 */
 	public static void main(String[] args) throws IOException {
 		PriorityQueue<Request> requestQueue = new PriorityQueue<Request>();
 		ArrayList<Course> courses = new ArrayList<Course>();

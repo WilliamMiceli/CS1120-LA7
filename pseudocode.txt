@@ -1,0 +1,259 @@
+public class PriorityQueue<T> {
+Queue<Request> queue1;
+Queue<Request> queue2;
+
+public PriorityQueue() {
+
+}
+public boolean isEmpty() {
+return (this.queue1.size() == 0);
+}
+public void enqueue(Request data) {
+while(true) {
+if(queue1.isEmpty()) {
+queue2.add(data);
+break;
+}else {
+if(data.compareTo(queue1.peek()) > 0) {
+queue2.add(data);
+break;
+}else {
+queue2.add(queue1.poll());
+}
+}
+}
+while(queue1.size() > 0) {
+queue2.add(queue1.poll());
+}
+while(queue2.size() > 0) {
+queue1.add(queue2.poll());
+}
+}
+public Request dequeue() {
+return queue1.poll();
+}
+}
+
+//========================================================================================================================================================================================================
+//
+//========================================================================================================================================================================================================
+
+public class Request implements Comparable<Request>{
+String studentName;
+String studentDept;
+String studentLevel;
+
+String courseDept;
+int courseNumber;
+
+public Request(String studentName, String studentDept, String studentLevel, String courseDept, int courseNumber) {
+this.studentName = studentName;
+this.studentDept = studentDept;
+this.studentLevel = studentLevel;
+this.courseDept = courseDept;
+this.courseNumber = courseNumber;
+}
+public int yearsFromGraduation() {
+switch (this.studentLevel) {
+case "Senior":
+return 0;
+case "Junior":
+return 1;
+case "Sophomore":
+return 2;
+case "Freshman":
+return 3;
+default:
+return -1;
+}
+}
+public int compareTo(Request other) {
+if(this.compareDept(other) != 0) {
+return this.compareDept(other);
+}else {
+if(this.yearsFromGraduation() < other.yearsFromGraduation()) {
+return 1;
+}else if(this.yearsFromGraduation() > other.yearsFromGraduation()) {
+return -1;
+}else {
+return 0;
+}
+}
+}
+int compareDept(Request other) {
+if(this.studentDept.compareTo(this.courseDept) == 0) {
+if(other.getStudentDept().compareTo(other.getCourseDept()) == 0) {
+return 0;
+}else {
+return 1;
+}
+}else {
+if(other.getStudentDept().compareTo(other.getCourseDept()) == 0){
+return -1;
+}else {
+return 0;
+}
+}
+}
+public String getStudentName() {
+return this.studentName;
+}
+public String getStudentDept() {
+return this.studentDept;
+}
+public String getStudentLevel() {
+return this.studentLevel;
+}
+public String getCourseDept() {
+return this.courseDept;
+}
+public int getCourseNumber() {
+return this.courseNumber;
+}
+}
+
+//========================================================================================================================================================================================================
+//
+//========================================================================================================================================================================================================
+
+public class Controller implements IController {
+PriorityQueue<Request> requestQueue;
+ArrayList<Course> courses;
+BufferedReader fileIn;
+BufferedReader fileIn1;
+
+public Controller (PriorityQueue<Request> requestQueue, ArrayList<Course> courses, BufferedReader fileIn, BufferedReader fileIn1) {
+this.requestQueue = requestQueue;
+this.courses = courses;
+this.fileIn = fileIn;
+this.fileIn1 = fileIn1;
+}
+
+@Override
+public void readCourseFile() {
+String inputLine;
+String[] input;
+for(int i = 0; i < 2; ++i) { // Skips the first two lines of the text file
+try {
+fileIn.readLine();
+} catch (IOException e) {
+Print: "Course File Read Error"
+}
+}
+while(true) {
+try {
+inputLine = fileIn.readLine();
+if(inputLine == null) {
+break;
+}
+Print: inputLine
+input = inputLine.split(",");
+courses.add(new Course(input[0],Integer.parseInt(input[1]),Integer.parseInt(input[2])));
+} catch (IOException e) { // End of file reached
+break;
+}
+}
+}
+@Override
+public void readRequestFile() {
+String inputLine;
+String[] input;
+try { // Skips the first line of the text file
+fileIn1.readLine();
+} catch (IOException e) {
+Print: "Request File Read Error"
+}
+while(true) {
+try {
+inputLine = fileIn1.readLine();
+if(inputLine == null) {
+break;
+}
+input = inputLine.split(",");
+addRequest(new Request(input[0],input[2],input[1],input[3],Integer.parseInt(input[4])));
+} catch (IOException e) { // End of file reached
+break;
+}
+}
+}
+@Override
+public void addRequest(Request req) {
+requestQueue.enqueue(req);
+}
+@Override
+public void processRequests() {
+Request currentRequest;
+Course requestedCourse;
+
+while(!requestQueue.isEmpty()) {
+currentRequest = requestQueue.dequeue();
+requestedCourse = getCourse(currentRequest.getCourseDept(), currentRequest.getCourseNumber());
+
+Print: "Request processed"
+if(requestedCourse.isFull()) {
+Print: currentRequest.getStudentName() + " cannot register for " + currentRequest.getCourseDept() + " " + currentRequest.getCourseNumber()
+} else {
+requestedCourse.addStudent(currentRequest.getStudentName());
+Print: currentRequest.getStudentName() + " successfully registered " + currentRequest.getCourseDept() + " " + currentRequest.getCourseNumber()
+}
+}
+}
+@Override
+public Course getCourse(String courseDept, int courseNumber) {
+for(int i = 0; i < courses.size(); ++i) {
+if(this.courses.get(i).getCourseDept().compareTo(courseDept) == 0 && this.courses.get(i).getCourseNumber() == courseNumber) {
+return this.courses.get(i);
+}
+}
+return null;
+}
+@Override
+public void printClassList() {
+for(int i = 0; i < this.courses.size(); ++i) {
+this.courses.get(i).printClassList();
+Print: 
+}
+}
+}
+
+//========================================================================================================================================================================================================
+//
+//========================================================================================================================================================================================================
+
+public class Course implements ICourse {
+String courseDept;
+int courseNumber;
+int capacity;
+ArrayList<String> students;
+
+public Course(String courseDept, int courseNumber, int capacity) {
+this.courseDept = courseDept;
+this.courseNumber = courseNumber;
+this.capacity = capacity;
+}
+
+@Override
+public boolean isFull() {
+return (students.size() >= capacity);
+}
+@Override
+public void addStudent(String name) {
+students.add(name);
+}
+@Override
+public void printClassList() {
+Print: "Class List for " + courseDept + " " + courseNumber
+for(int i = 0; i < students.size(); ++i) {
+Print: students.get(i)
+}
+}
+public String getCourseDept() {
+return this.courseDept;
+}
+public int getCourseNumber() {
+return this.courseNumber;
+}
+public int getCapacity() {
+return this.capacity;
+}
+}

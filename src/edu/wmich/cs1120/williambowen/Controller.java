@@ -9,7 +9,13 @@ public class Controller implements IController {
 	private ArrayList<Course> courses;
 	private BufferedReader fileIn;
 	private BufferedReader fileIn1;
-	
+	/**
+	 * The constructor
+	 * @param requestQueue The priority queue of the requests
+	 * @param courses The list of courses available
+	 * @param fileIn The file for courses
+	 * @param fileIn1 The file for requests
+	 */
 	public Controller (PriorityQueue<Request> requestQueue, ArrayList<Course> courses, BufferedReader fileIn, BufferedReader fileIn1) {
 		this.requestQueue = requestQueue;
 		this.courses = courses;

@@ -7,7 +7,14 @@ public class Request implements Comparable<Request>{
 	
 	private String courseDept;
 	private int courseNumber;
-	
+	/**
+	 * The constructor
+	 * @param studentName The name of the student
+	 * @param studentDept The department the student is majoring in
+	 * @param studentLevel The seniority of the student
+	 * @param courseDept The department of the course requested
+	 * @param courseNumber The number of the course requested
+	 */
 	public Request(String studentName, String studentDept, String studentLevel, String courseDept, int courseNumber) {
 		this.studentName = studentName;
 		this.studentDept = studentDept;
@@ -18,7 +25,7 @@ public class Request implements Comparable<Request>{
 	/**
 	 * Returns number of years to graduation (0 for seniors, 1 for juniors etc.).
 	 * This is determined from the student's level - senior, junior, etc.
-	 * @return
+	 * @return The number of years until graduation
 	 */
 	public int yearsFromGraduation() {
 		switch (this.studentLevel) {
@@ -35,7 +42,8 @@ public class Request implements Comparable<Request>{
 		}
 	}
 	/**
-	 * 
+	 * Compares two requests to determine which has priority.
+	 * @return positive for higher priority, negative for lower, zero for same
 	 */
 	public int compareTo(Request other) {
 		if(this.compareDept(other) != 0) {
@@ -51,9 +59,9 @@ public class Request implements Comparable<Request>{
 		}
 	}
 	/**
-	 * 
-	 * @param other
-	 * @return
+	 * Used by the compareTo method to see if priority can be determined by department
+	 * @param other The other request to compare against
+	 * @return positive for higher priority, negative for lower, zero for same
 	 */
 	private int compareDept(Request other) {
 		if(this.studentDept.compareTo(this.courseDept) == 0) {
@@ -71,36 +79,36 @@ public class Request implements Comparable<Request>{
 		}
 	}
 	/**
-	 * 
-	 * @return
+	 * Getter for the student's name
+	 * @return studentName
 	 */
 	public String getStudentName() {
 		return this.studentName;
 	}
 	/**
-	 * 
-	 * @return
+	 * Getter for the student's department
+	 * @return studentDept
 	 */
 	public String getStudentDept() {
 		return this.studentDept;
 	}
 	/**
-	 * 
-	 * @return
+	 * Getter for the student's level
+	 * @return studentLevel
 	 */
 	public String getStudentLevel() {
 		return this.studentLevel;
 	}
 	/**
-	 * 
-	 * @return
+	 * Getter for the student course request's department
+	 * @return courseDept
 	 */
 	public String getCourseDept() {
 		return this.courseDept;
 	}
 	/**
-	 * 
-	 * @return
+	 * Getter for the student course request's number
+	 * @return courseNumber
 	 */
 	public int getCourseNumber() {
 		return this.courseNumber;
